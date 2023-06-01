@@ -52,10 +52,11 @@ const deleteContact = asyncHandler(async (req, res, next) => {
   res.status(200).json(contact);
 });
 
+
 module.exports = {
   getAllContacts,
   addContact,
   updateContact,
   deleteContact,
   getContactById,
-};
+};  

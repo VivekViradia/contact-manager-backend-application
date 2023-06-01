@@ -4,12 +4,12 @@ const {
   loginUser,
   connectUser,
 } = require("../controller/user-controller");
-const userRouter = express.Router();
+const router = express.Router();
 
-userRouter.post("/register", registerUser);
+router.post("/register", registerUser);
 
-userRouter.post("/login", loginUser);
+router.post("/login", loginUser);
 
-userRouter.get("/current", connectUser);
+router.get("/current", connectUser);
 
-module.exports = userRouter;
+module.exports = router;
