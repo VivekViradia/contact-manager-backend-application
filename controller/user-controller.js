@@ -38,16 +38,23 @@ const loginUser = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email });
   // Compare password with HashedPassword
   if (user && (await bcrypt.compare(password, user.password))) {
-    const accessToken = jwt.sign({
-      user: {
-        username: user.username,
-        email: user.email,
-        id: user.id,
+    const accessToken = jwt.sign(
+      {
+        user: {
+          username: user.username,
+          email: user.email,
+          id: user.id,
+        },
       },
-    });
+      process.env.ACCESS_TOKEN_SECERT,
+      {
+        expiresIn: "1m",
+      }
+    );
     res.status(200).json({ accessToken });
+  } else {
+    res.status(401).json({ message: "Email or Password is not valid" });
   }
-  res.json({ message: "Login the user" });
 });
 
 const connectUser = asyncHandler(async (req, res, next) => {
