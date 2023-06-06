@@ -58,7 +58,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 });
 
 const connectUser = asyncHandler(async (req, res, next) => {
-  res.json({ message: "Connect the user" });
+  res.json(req.user);
 });
 
 module.exports = { registerUser, loginUser, connectUser };
