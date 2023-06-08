@@ -6,7 +6,7 @@ const Contact = require("../models/contact-model");
 //@access private
 const getAllContacts = asyncHandler(async (req, res, next) => {
   const contacts = await Contact.find({ user_id: req.user.id });
-  return res.status(200).json({ contacts });
+  res.status(200).json(contacts);
 });
 
 //@desc Get contact
@@ -23,18 +23,21 @@ const getContactById = asyncHandler(async (req, res, next) => {
 //@desc Create New contact
 //@route POST /api/contacts
 //@access private
-const addContact = asyncHandler(async (req, res, next) => {
-  console.log("The request body is:", req.body);
+const createContact = asyncHandler(async (req, res, next) => {
+   console.log("The request body is :", req.body);
   const { name, email, phone } = req.body;
   if (!name || !email || !phone) {
-    res.status(404).json({ message: "All fields are mandatory" });
+    res.status(400);
+    throw new Error("All fields are mandatory !");
   }
   const contact = await Contact.create({
     name,
     email,
     phone,
+    user_id: req.user.id,
   });
-  return res.status(201).json(contact);
+
+  res.status(201).json(contact);
 });
 
 //@desc Update contact
@@ -68,7 +71,7 @@ const deleteContact = asyncHandler(async (req, res, next) => {
 
 module.exports = {
   getAllContacts,
-  addContact,
+  createContact,
   updateContact,
   deleteContact,
   getContactById,
