@@ -24,7 +24,7 @@ const getContactById = asyncHandler(async (req, res, next) => {
 //@route POST /api/contacts
 //@access private
 const createContact = asyncHandler(async (req, res, next) => {
-   console.log("The request body is :", req.body);
+  console.log("The request body is :", req.body);
   const { name, email, phone } = req.body;
   if (!name || !email || !phone) {
     res.status(400);
@@ -49,6 +49,12 @@ const updateContact = asyncHandler(async (req, res, next) => {
     res.status(404).json({ message: "Contact Not Found" });
   }
 
+  if (contact.user_id.toString() !== req.user.id) {
+    res.status(403).json({
+      message: "User don't have permission to update other user contact",
+    });
+  }
+
   const updateContact = await Contact.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -65,6 +71,13 @@ const deleteContact = asyncHandler(async (req, res, next) => {
   if (!contact) {
     res.status(404).json({ message: "Contact Not Found" });
   }
+
+  if (contact.user_id.toString() !== req.user.id) {
+    res.status(403).json({
+      message: "User don't have permission to delete other user contact",
+    });
+  }
+
   await contact.deleteOne();
   res.status(200).json(contact);
 });
